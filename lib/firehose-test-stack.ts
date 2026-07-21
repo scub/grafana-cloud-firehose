@@ -87,9 +87,11 @@ export class FirehoseTestStack extends cdk.Stack {
         endpointConfiguration: {
           url: grafanaFirehoseEndpointUrl,
           name: 'GrafanaCloudLoki',
-          // Using the older access key mechanism, was unable to get the secret
-          // to resolve correctly
-          accessKey: this.grafanaSecret.secretValueFromJson('api_key').unsafeUnwrap(),
+        },
+        secretsManagerConfiguration: {
+          enabled: true,
+          roleArn: firehoseRole.roleArn,
+          secretArn: this.grafanaSecret.secretArn,
         },
         requestConfiguration: {
           contentEncoding: 'GZIP',
